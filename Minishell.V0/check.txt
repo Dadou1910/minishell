@@ -1,0 +1,42 @@
+2 bytes in 1 blocks are still reachable in loss record 1 of 6
+==1652470==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1652470==    by 0x403A90: ft_calloc (ft_calloc.c:23)
+==1652470==    by 0x4030C8: ft_next (get_next_line.c:37)
+==1652470==    by 0x403490: get_next_line (get_next_line.c:118)
+==1652470==    by 0x401906: main (minishell.c:101)
+==1652470==
+==1652470== 6 bytes in 1 blocks are still reachable in loss record 2 of 6
+==1652470==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1652470==    by 0x40379D: ft_strncpy (ft_split.c:41)
+==1652470==    by 0x4038EB: ft_split (ft_split.c:74)
+==1652470==    by 0x401823: check_ (minishell.c:73)
+==1652470==    by 0x4019C0: main (minishell.c:122)
+==1652470==
+==1652470== 16 bytes in 1 blocks are still reachable in loss record 3 of 6
+==1652470==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1652470==    by 0x403846: ft_split (ft_split.c:62)
+==1652470==    by 0x401823: check_ (minishell.c:73)
+==1652470==    by 0x4019C0: main (minishell.c:122)
+==1652470==
+==1652470== 25 bytes in 1 blocks are still reachable in loss record 4 of 6
+==1652470==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1652470==    by 0x4016E7: real_line (minishell.c:35)
+==1652470==    by 0x40195C: main (minishell.c:112)
+==1652470==
+==1652470== 25 bytes in 5 blocks are still reachable in loss record 5 of 6
+==1652470==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1652470==    by 0x40379D: ft_strncpy (ft_split.c:41)
+==1652470==    by 0x4038EB: ft_split (ft_split.c:74)
+==1652470==    by 0x401985: main (minishell.c:115)
+==1652470==
+==1652470== 48 bytes in 1 blocks are still reachable in loss record 6 of 6
+==1652470==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1652470==    by 0x403846: ft_split (ft_split.c:62)
+==1652470==    by 0x401985: main (minishell.c:115)
+==1652470==
+==1652470== LEAK SUMMARY:
+==1652470==    definitely lost: 0 bytes in 0 blocks
+==1652470==    indirectly lost: 0 bytes in 0 blocks
+==1652470==      possibly lost: 0 bytes in 0 blocks
+==1652470==    still reachable: 122 bytes in 10 blocks
+==1652470==         suppressed: 0 bytes in 0 blocks
