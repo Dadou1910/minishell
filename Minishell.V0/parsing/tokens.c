@@ -12,9 +12,6 @@
 
 #include "../includes/minishell.h"
 
-#include <stdlib.h>
-#include "libft.h"
-
 static int count_tokens(char *input)
 {
     int count = 0;

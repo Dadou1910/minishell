@@ -18,7 +18,28 @@
 # include <sys/types.h>
 # include <sys/uio.h>
 # include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
+typedef struct s_command
+{
+    char    **args;        // Command  + command arguments (e.g., ["-l", "/home"])
+    char    *infile;       // Input file name for redirection (e.g., "< infile")
+    char    *outfile;      // Output file name for redirection (e.g., "> outfile" or ">> outfile")
+    int redir_type;     // 1 for '>', 2 for '>>' (append)
+    int pipe_in;        // 1 if the command reads from a pipe
+    int pipe_out;       // 1 if the command writes to a pipe
+    int *pids;          // keep track of the children process pids
+    int *p;             // 0 or 1 for read_end and write_end
+    int pprev;          // to redirect stdin to read_end of pipe
+    int pipe_count;     // number of pipes
+    struct s_command *next; // Pointer to the next command (for pipelines)
+} t_command;
+
+char    **tokenize_input(char *input);
+t_command   *parse_pipeline_commands(char **tokens);
+t_command   *parse_and_tokenize(void);
+void    add_line_to_history(const char *line);
 void	pipex(char **line, int argc, char **envp);
 void	ft_pwd(void);
 void	ft_env(char **envp);

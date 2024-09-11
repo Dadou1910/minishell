@@ -17,6 +17,13 @@
 #include <stdio.h>
 #include <unistd.h>
 
+void add_line_to_history(const char *line)
+{
+    if (line && *line) {
+        add_history(line);  // Add the line to the in-memory history
+    }
+}
+
 void	main_bis(char *line, char **envp)
 {
 	int		count;
@@ -45,8 +52,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	while (1)
 	{
-		ft_pwd();
-		line = readline(" >> ");
+		parse_and_tokenize();
 		if (ft_strcmp(line, "exit") == 0)
 		{
 			free(line);

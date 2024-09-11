@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-#include <stdlib.h>
-
 //initialize struct
 t_command *create_command(void)
 {
@@ -37,6 +35,7 @@ t_command *create_command(void)
     if (!cmd->p)
         return (NULL);
     cmd->pprev = -1;
+    cmd->pipe_count = 0;
     cmd->next = NULL;
     return (cmd);
 }
@@ -120,5 +119,32 @@ t_command *parse_pipeline_commands(char **tokens)
         current = new_cmd;
     }
     return (head);
+}
+
+t_command *parse_and_tokenize(void) 
+{
+    char *input;
+    char **tokens;
+    t_command *command_list;
+
+	ft_pwd();
+    input = readline(" >> ");
+	add_line_to_history(input);
+    if (!input || !*input) {
+        free(input);
+        return NULL;
+    }
+    tokens = tokenize_input(input);
+    if (!tokens) {
+        free(input);
+        return NULL;
+    }
+    command_list = parse_pipeline_commands(tokens);
+    free(input);
+    for (int i = 0; tokens[i]; i++) {
+        free(tokens[i]);
+    }
+    free(tokens);
+    return command_list;
 }
 

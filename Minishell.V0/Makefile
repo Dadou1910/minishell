@@ -1,9 +1,10 @@
 NAME            = Minishell
 
 CC              = cc
-CFLAGS          = -Wall -Wextra -Werror -g3
+CFLAGS          = -Wall -Wextra -Werror -g3 -lreadline
 INCLUDES_DIR    = includes/
 BUILTINS_DIR    = builtins/
+PARSING_DIR		= parsing/
 SRC_DIR         = exec/
 PIPEX_DIR       = sources_bonus/
 GNL_DIR         = get_next_line/
@@ -14,10 +15,11 @@ DEPS            = Makefile $(wildcard $(INCLUDES_DIR)*.h) $(wildcard $(GNL_DIR)*
 
 BUILTINS_SRC    = $(wildcard $(BUILTINS_DIR)*.c)
 EXEC_SRC        = $(wildcard $(SRC_DIR)*.c)
+PARSING_SRC		= $(wildcard $(PARSING_DIR)*.c)
 PIPEX_SRC       = $(wildcard $(PIPEX_DIR)*.c)
 GNL_SRC         = $(wildcard $(GNL_DIR)*.c)
 
-SOURCES         = $(BUILTINS_SRC) $(EXEC_SRC) $(PIPEX_SRC) $(GNL_SRC)
+SOURCES         = $(BUILTINS_SRC) $(EXEC_SRC) $(PIPEX_SRC) $(PARSING_SRC) $(GNL_SRC)
 
 OBJ_FILES       = $(patsubst %.c,$(OBJ_DIR)%.o,$(SOURCES))
 
