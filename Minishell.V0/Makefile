@@ -1,7 +1,7 @@
 NAME            = Minishell
 
 CC              = cc
-CFLAGS          = -Wall -Wextra -Werror -g3 -lreadline
+CFLAGS          = -Wall -Wextra -Werror -g3
 INCLUDES_DIR    = includes/
 BUILTINS_DIR    = builtins/
 PARSING_DIR		= parsing/

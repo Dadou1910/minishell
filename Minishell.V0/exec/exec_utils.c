@@ -55,7 +55,7 @@ int	count_pipe(char *line)
 	return (count + 1);
 }
 
-void	check_(char **line, int count, char **envp)
+void	check_(char **args, int count, char **envp)
 {
 	pid_t	pid;
 	char	**tab;
@@ -67,15 +67,15 @@ void	check_(char **line, int count, char **envp)
 	}
 	else if (pid == 0)
 	{
-		tab = ft_split(line[0], ' ');
-		if (ft_strcmp(line[0], "pipex") == 0)
+		tab = args;
+		if (ft_strcmp(args[0], "pipex") == 0)
 		{
-			pipex(line, count, envp);
+			pipex(args, count, envp);
 			freetab(tab);
-			freetab(line);
+			freetab(args);
 			exit(EXIT_SUCCESS);
 		}
-		freetab(line);
+		freetab(args);
 		if (execve(path(tab[0], envp), &tab[0], envp) < 0)
 		{
 			freetab(tab);

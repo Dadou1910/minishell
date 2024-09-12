@@ -23,8 +23,6 @@ t_command *create_command(void)
     cmd->args = malloc(sizeof(char *) * 1024);
     if (!cmd->args)
         return (NULL);
-    cmd->infile = NULL;
-    cmd->outfile = NULL;
     cmd->redir_type = 0;
     cmd->pipe_in = 0;
     cmd->pipe_out = 0;
@@ -36,37 +34,69 @@ t_command *create_command(void)
         return (NULL);
     cmd->pprev = -1;
     cmd->pipe_count = 0;
+    cmd->redir = NULL;
     cmd->next = NULL;
     return (cmd);
 }
 
+
 //handles < > >>
 int handle_redirection(t_command *cmd, char **tokens, int *i)
 {
-    if (ft_strcmp(tokens[*i], ">") == 0)
+    int fd;
+
+    if (strcmp(tokens[*i], "<") == 0)
     {
+        if (fd = open_fct_check(tokens[++(*i)], 0))
+            cmd->filein = fd;
+        return (1);
+    }
+    else if (strcmp(tokens[*i], ">") == 0)
+    {
+        if (fd = open_fct_check(tokens[++(*i)], 1))
+            cmd->fileout = fd;
         cmd->redir_type = 1;
-        cmd->outfile = ft_strdup(tokens[++(*i)]);
         return (1);
     }
-    else if (ft_strcmp(tokens[*i], ">>") == 0)
+    else if (strcmp(tokens[*i], ">>") == 0)
     {
+        if (fd = open_fct_check(tokens[++(*i)], 2))
+            cmd->fileout = fd;
         cmd->redir_type = 2;
-        cmd->outfile = ft_strdup(tokens[++(*i)]);
         return (1);
     }
-    else if (ft_strcmp(tokens[*i], "<") == 0)
+    else if (strcmp(tokens[*i], "<<") == 0)
     {
-        cmd->infile = ft_strdup(tokens[++(*i)]);
+        if (fd = open_fct_check(tokens[++(*i)], 0))
+            cmd->fileout = fd;
         return (1);
     }
     return (0);
 }
 
+
 //initializes commmand and args in struct
 void handle_command_and_args(t_command *cmd, char **tokens, int *i, int *arg_idx)
 {
     cmd->args[(*arg_idx)++] = ft_strdup(tokens[*i]);
+}
+
+//creates a block (between pipes)
+void process_command_block(t_command *cmd, char **tokens, int *i)
+{
+    int arg_idx = 0;
+
+    while (tokens[*i] && ft_strcmp(tokens[*i], "|") != 0)
+    {
+        if (handle_redirection(cmd, tokens, i) == 1)
+        {
+            (*i)++;
+            continue;
+        }
+        handle_command_and_args(cmd, tokens, i, &arg_idx);
+        (*i)++;
+    }
+    cmd->args[arg_idx] = NULL;
 }
 
 //checks if pipe before and/or after this block
@@ -79,21 +109,6 @@ void set_pipe_flags(t_command *current, t_command *new_cmd, char **tokens, int *
         new_cmd->pipe_out = 1;
         (*i)++;
     }
-}
-
-//creates a block (between pipes)
-void process_command_block(t_command *cmd, char **tokens, int *i)
-{
-    int arg_idx = 0;
-
-    while (tokens[*i] && ft_strcmp(tokens[*i], "|") != 0)
-    {
-        if (handle_redirection(cmd, tokens, i))
-            continue;
-        handle_command_and_args(cmd, tokens, i, &arg_idx);
-        (*i)++;
-    }
-    cmd->args[arg_idx] = NULL;
 }
 
 //creates a linked list of struct where each struct is for
@@ -112,6 +127,7 @@ t_command *parse_pipeline_commands(char **tokens)
             ft_error("malloc");
         process_command_block(new_cmd, tokens, &i);
         set_pipe_flags(current, new_cmd, tokens, &i);
+        
         if (!head)
             head = new_cmd;
         else
@@ -121,30 +137,18 @@ t_command *parse_pipeline_commands(char **tokens)
     return (head);
 }
 
-t_command *parse_and_tokenize(void) 
+t_command *parse_and_tokenize(char *line) 
 {
-    char *input;
     char **tokens;
     t_command *command_list;
 
-	ft_pwd();
-    input = readline(" >> ");
-	add_line_to_history(input);
-    if (!input || !*input) {
-        free(input);
-        return NULL;
-    }
-    tokens = tokenize_input(input);
-    if (!tokens) {
-        free(input);
-        return NULL;
-    }
+    if (!line || !*line)
+        return (NULL);
+    tokens = tokenize_input(line);
+    if (!tokens)
+        return (NULL);
     command_list = parse_pipeline_commands(tokens);
-    free(input);
-    for (int i = 0; tokens[i]; i++) {
-        free(tokens[i]);
-    }
-    free(tokens);
+    freetab(tokens);
     return command_list;
 }
 

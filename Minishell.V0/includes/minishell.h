@@ -33,12 +33,25 @@ typedef struct s_command
     int *p;             // 0 or 1 for read_end and write_end
     int pprev;          // to redirect stdin to read_end of pipe
     int pipe_count;     // number of pipes
+    t_redir *redir;     // struct for files
     struct s_command *next; // Pointer to the next command (for pipelines)
 } t_command;
 
+typedef struct s_redir
+{
+    int *infile_fds;        // File descriptor for input file
+    int *outfile_fds;       // File descriptor for output file
+    int append_outfile_fd; // File descriptor for append output file (>>)
+    char **infiles;       // Array to store input files (optional for filenames)
+    char **outfiles;      // Array to store output files (optional for filenames)
+    int infile_count;     // Number of input files
+    int outfile_count;    // Number of output files
+} t_redir;
+
+
 char    **tokenize_input(char *input);
 t_command   *parse_pipeline_commands(char **tokens);
-t_command   *parse_and_tokenize(void);
+t_command   *parse_and_tokenize(char *line);
 void    add_line_to_history(const char *line);
 void	pipex(char **line, int argc, char **envp);
 void	ft_pwd(void);
@@ -52,5 +65,4 @@ int		count_arg(char **argv);
 char	*real_line(char *str);
 int		count_pipe(char *line);
 void	check_(char **line, int count, char **envp);
-
 #endif

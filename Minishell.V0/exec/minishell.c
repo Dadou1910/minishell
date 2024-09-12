@@ -24,42 +24,51 @@ void add_line_to_history(const char *line)
     }
 }
 
-void	main_bis(char *line, char **envp)
+void	main_bis(char *line, char **envp, t_command *cmd)
 {
 	int		count;
-	char	**tab;
 
-	count = 0;
-	tab = ft_split(line, '|');
 	count = count_pipe(line);
-	if (is_builtin(line, envp) == 0)
+	while (cmd)
 	{
+		if (is_builtin(cmd->args[0], envp) == 0)
+		{
+		}
+		else
+		{
+			check_(cmd->args, count, envp);
+		}
+		freetab(cmd->args);
+		t_command *next_cmd = cmd->next;
+		free(cmd);
+		cmd = next_cmd;
 	}
-	else
-	{
-		free(line);
-		check_(tab, count, envp);
-	}
-	freetab(tab);
 }
+
 
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
+	t_command *cmd;
 
 	line = NULL;
 	(void)argc;
 	(void)argv;
 	while (1)
 	{
-		parse_and_tokenize();
+		ft_pwd();
+		line = readline( " >> ");
+		add_line_to_history(line);
 		if (ft_strcmp(line, "exit") == 0)
 		{
 			free(line);
 			break ;
 		}
-		if ((ft_strcmp(line, "\n")) != 0)
-			main_bis(line, envp);
+		if (line[0] != '\0')
+		{
+			cmd = parse_and_tokenize(line);
+			main_bis(line, envp, cmd);
+		}
 	}
 	return (0);
 }
