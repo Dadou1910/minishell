@@ -9,7 +9,7 @@
 /*   Updated: 2024/09/04 10:50:08 by jealefev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+/*
 #include "../includes/minishell.h"
 
 #include <stdio.h>
@@ -115,14 +115,14 @@ int handle_input_redirection(t_command *cmd, t_token *current)
     {
         if (current->type == FD)
         {
+            if (cmd->fd_in != STDIN_FILENO)
+                close(cmd->fd_in);
             cmd->fd_in = open_file_for_redirection(current->value, ROUT);
             if (cmd->fd_in == -1)
             {
                 perror("Error opening input file");
-                return 1;  // Error opening input file
+                return 1; 
             }
-            if (cmd->fd_in != STDIN_FILENO)
-                close(cmd->fd_in);
         }
     }
     return 0;
@@ -135,14 +135,14 @@ int handle_output_redirection(t_command *cmd, t_token *current)
     {
         if (current->type == FD)
         {
+            if (cmd->fd_out != STDOUT_FILENO)
+                close(cmd->fd_out);
             cmd->fd_out = open_file_for_redirection(current->value, current->prev->type);
             if (cmd->fd_out == -1)
             {
-                perror("Error opening outpur file");
+                perror("Error opening output file");
                 return (1);
             }
-            if (cmd->fd_out != STDOUT_FILENO)
-                close(cmd->fd_out);
         }
     }
     return 0;
@@ -195,6 +195,4 @@ t_token *parse_input(char *input)
     }
     freetab(tokens);
     return head;
-}
-
-
+}*/

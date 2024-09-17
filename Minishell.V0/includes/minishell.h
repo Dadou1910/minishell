@@ -23,30 +23,15 @@
 
 typedef struct s_command
 {
-    char    **args;        // Command  + command arguments (e.g., ["-l", "/home"])
-    char    *infile;       // Input file name for redirection (e.g., "< infile")
-    char    *outfile;      // Output file name for redirection (e.g., "> outfile" or ">> outfile")
-    int redir_type;     // 1 for '>', 2 for '>>' (append)
-    int pipe_in;        // 1 if the command reads from a pipe
-    int pipe_out;       // 1 if the command writes to a pipe
-    int *pids;          // keep track of the children process pids
-    int *p;             // 0 or 1 for read_end and write_end
-    int pprev;          // to redirect stdin to read_end of pipe
-    int pipe_count;     // number of pipes
-    t_redir *redir;     // struct for files
+    char    **args;         // Command  + command arguments (e.g., ["-l", "/home"])
+    int     fd_in;          // File descriptor of the input file in the block
+    int     fd_out;         // File descriptor of the output file in the block
+    int *pids;              // keep track of the children process pids
+    int *p;                 // 0 or 1 for read_end and write_end
+    int pprev;              // to redirect stdin to read_end of pipe
+    int pipe_count;         // number of pipes
     struct s_command *next; // Pointer to the next command (for pipelines)
 } t_command;
-
-typedef struct s_redir
-{
-    int *infile_fds;        // File descriptor for input file
-    int *outfile_fds;       // File descriptor for output file
-    int append_outfile_fd; // File descriptor for append output file (>>)
-    char **infiles;       // Array to store input files (optional for filenames)
-    char **outfiles;      // Array to store output files (optional for filenames)
-    int infile_count;     // Number of input files
-    int outfile_count;    // Number of output files
-} t_redir;
 
 
 char    **tokenize_input(char *input);

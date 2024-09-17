@@ -12,16 +12,47 @@
 
 #include "../includes/minishell.h"
 
-int	open_fct_check(char *file, int i)
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
+/*
+int is_valid_env_char(char c)
 {
-	int	filein;
-
-	filein = 0;
-	if (i == 0)
-		filein = open(file, O_RDONLY);
-	else if (i == 1)
-		filein = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (i == 2)
-		filein = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	return (filein);
+    return (ft_isalnum(c) || c == '_');
 }
+
+int is_env_variable(t_token *token)
+{
+    int i;
+
+    i = 1;
+    if (token && token->value[0] == '$' && token->value[1] != '\0') {
+        while (token->value[i]) {
+            if (!is_valid_env_char(token->value[i])) {
+                return (0);
+            }
+            i++;
+        }
+        return (1);
+    }
+    return (0);
+}
+
+char *expand_env_variable(t_token *token)
+{
+    const char *var_name;
+    const char *var_value;
+
+    if (is_env_variable(token))
+    {
+        var_name = token->value + 1;
+        var_value = getenv(var_name);
+        if (var_value)
+            return (ft_strdup(var_value));
+        else
+            return (ft_strdup(""));
+    }
+    return (ft_strdup(token->value));
+}
+*/

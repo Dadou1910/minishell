@@ -21,8 +21,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-
-typedef enum TYPE {
+/*
+typedef enum TYPE
+{
     ARG,    // Command or argument
     FD,     // File (used for input/output)
     LIM,    // Limiter for heredoc
@@ -33,7 +34,8 @@ typedef enum TYPE {
     PIPE    // Pipe '|'
 } t_TYPE;
 
-typedef struct s_token {
+typedef struct s_token
+{
     char            *value;  // Token value (command, file, etc.)
     t_TYPE          type;    // Token type (from t_TYPE)
     struct s_token  *next;   // Pointer to the next token in the list
@@ -41,7 +43,8 @@ typedef struct s_token {
 } t_token;
 
 
-typedef struct s_command {
+typedef struct s_command
+{
     t_token         *tokens;     // Linked list of tokens (command, arguments, files, etc.)
     int             fd_in;       // File descriptor for input redirection
     int             fd_out;      // File descriptor for output redirection
@@ -51,32 +54,33 @@ typedef struct s_command {
     struct s_command *next;      // Pointer to the next block (for piped commands)
 } t_command;
 
+t_token     *parse_input(char *input);
+int         process_redirections(t_command *cmd, t_token *tokens);
+*/
 //==========================================================================================
 //                                     PARSING
 //==========================================================================================
 
-t_token     *parse_input(char *input);
-int         process_redirections(t_command *cmd, t_token *tokens);
-/*
+
+
+
 typedef struct s_command
 {
-    char    **args;        // Command  + command arguments (e.g., ["-l", "/home"])
-    char    *infile;       // Input file name for redirection (e.g., "< infile")
-    char    *outfile;      // Output file name for redirection (e.g., "> outfile" or ">> outfile")
-    int redir_type;     // 1 for '>', 2 for '>>' (append)
-    int pipe_in;        // 1 if the command reads from a pipe
-    int pipe_out;       // 1 if the command writes to a pipe
-    int *pids;          // keep track of the children process pids
-    int *p;             // 0 or 1 for read_end and write_end
-    int pprev;          // to redirect stdin to read_end of pipe
-    int ipids;
-    int pipe_count;     // number of pipes
+    char            **args;         // Command  + command arguments (e.g., ["-l", "/home"])
+    int             fd_in;          // File descriptor for input redirection
+    int             fd_out;         // File descriptor for output redirection
+    int             *pids;          // keep track of the children process pids
+    int             *p;             // 0 or 1 for read_end and write_end
+    int             pprev;          // to redirect stdin to read_end of pipe
+    int             ipids;
+    int             pipe_count;     // number of pipes
     struct s_command *next; // Pointer to the next command (for pipelines)
 } t_command;
-*/
-//char    **tokenize_input(char *input);
-//t_command   *parse_pipeline_commands(char **tokens);
-//t_command   *parse_and_tokenize(void);
+
+char    **tokenize_input(char *input);
+t_command   *parse_pipeline_commands(char **tokens);
+t_command   *parse_and_tokenize(void);
+
 void    add_line_to_history(const char *line);
 void	pipex(char **line, int argc, char **envp);
 void	ft_pwd(void);
