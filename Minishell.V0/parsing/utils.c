@@ -12,6 +12,18 @@
 
 #include "../includes/minishell.h"
 
+void    initialize_t_command(t_command *cmd)
+{
+    cmd->args = NULL;
+    cmd->fd_in = -1;
+    cmd->fd_out = -1;
+    cmd->pids = NULL;
+    cmd->p = NULL;
+    cmd->pprev = -1;
+    cmd->pipe_count = 0;
+    cmd->next = NULL;
+}
+
 int	open_fct_check(char *file, int i)
 {
 	int	filein;
@@ -24,4 +36,30 @@ int	open_fct_check(char *file, int i)
 	else if (i == 2)
 		filein = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	return (filein);
+}
+
+void    free_t_command(t_command *cmd)
+{
+    t_command *temp;
+
+    while (cmd)
+    {
+        temp = cmd->next;
+        freetab(cmd->args);
+        free(cmd);
+        cmd = temp;
+    }
+}
+
+void    new_t_command(t_command *cmd)
+{
+    t_command   *new_cmd;
+    new_cmd = malloc(sizeof(t_command));
+    if (!new_cmd)
+    {
+        perror("Error allocating memory for new command");
+        return(1);
+    }
+    initialize_t_command(new_cmd);
+    cmd->next = new_cmd;
 }

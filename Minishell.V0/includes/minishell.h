@@ -33,11 +33,27 @@ typedef struct s_command
     struct s_command *next; // Pointer to the next command (for pipelines)
 } t_command;
 
+typedef struct
+{
+    int i;
+    int sq_open;
+    int dq_open;
+} t_state;
 
-char    **tokenize_input(char *input);
-t_command   *parse_pipeline_commands(char **tokens);
-t_command   *parse_and_tokenize(char *line);
+// =========================================================================
+//                                PARSING
+// =========================================================================
+
+void    initialize_t_command(t_command *cmd);
+int     open_fct_check(char *file, int i);
+void    free_t_command(t_command *cmd);
+void    new_t_command(t_command *cmd);
 void    add_line_to_history(const char *line);
+char    **tokenize_input(char *input);
+
+// Expand
+
+t_command   *parse_pipeline_commands(char **tokens);
 void	pipex(char **line, int argc, char **envp);
 void	ft_pwd(void);
 void	ft_env(char **envp);

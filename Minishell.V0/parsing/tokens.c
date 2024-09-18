@@ -33,57 +33,14 @@ static int count_tokens(char *input)
             continue;
         }
         count++;
-        while (input[i] && input[i] != ' ' && input[i] != '|' && input[i] != '>' && input[i] != '<')
+        while (input[i] && input[i] != ' ' && input[i] != '|'
+                && input[i] != '>' && input[i] != '<')
             i++;
     }
     return count;
 }
 
-// static char *extract_token(char *input, int *i)
-// {
-//     int start = *i;
-//     int length = 0;
 
-//     if (input[*i] == '|' || input[*i] == '>' || input[*i] == '<')
-//     {
-//         length = 1;
-//         if (input[*i] == '>' && input[*i + 1] == '>')
-//             length = 2;
-//         *i += length;
-//         return (ft_substr(input, start, length));
-//     }
-//     while (input[*i] && input[*i] != ' ')
-//     {
-//         (*i)++;
-//         length++;
-//     }
-//     return (ft_substr(input, start, length));
-// }
-
-void    initialize_t_command(t_command *cmd)
-{
-    cmd->args = NULL;
-    cmd->fd_in = -1;
-    cmd->fd_out = -1;
-    cmd->pids = NULL;
-    cmd->p = NULL;
-    cmd->pprev = -1;
-    cmd->pipe_count = 0;
-    cmd->next = NULL;
-}
-
-void    new_t_command(t_command *cmd)
-{
-    t_command   *new_cmd;
-    new_cmd = malloc(sizeof(t_command));
-    if (!new_cmd)
-    {
-        perror("Error allocating memory for new command");
-        return(1);
-    }
-    initialize_t_command(new_cmd);
-    cmd->next = new_cmd;
-}
 
 void process_tokens(char **tokens, t_command *cmd, int *j)
 {
