@@ -66,7 +66,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (line[0] != '\0')
 		{
-			cmd = parse_and_tokenize(line);
+			cmd = fill_t_command(line);
 			main_bis(line, envp, cmd);
 		}
 	}

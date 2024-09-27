@@ -58,7 +58,7 @@ void    new_t_command(t_command *cmd)
     if (!new_cmd)
     {
         perror("Error allocating memory for new command");
-        return(1);
+        return ;
     }
     initialize_t_command(new_cmd);
     cmd->next = new_cmd;

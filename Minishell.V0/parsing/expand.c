@@ -12,51 +12,26 @@
 
 #include "../includes/minishell.h"
 
-
-char *check_quotes(const char *input)
-{
-    int single_quote_open = 0;
-    int double_quote_open = 0;
-    int i;
-
-    i = 0;
-    while (input[i++])
-    {
-        if (input[i] == '\'' && !double_quote_open)
-            single_quote_open = !single_quote_open;
-        else if (input[i] == '"' && !single_quote_open)
-            double_quote_open = !double_quote_open;
-    }
-    if (!single_quote_open && double_quote_open)
-        return ("\'");
-    else if (single_quote_open && double_quote_open)
-        return ("'\"");
-    else if (single_quote_open && !double_quote_open)
-        return ("\"");
-    else if (!single_quote_open && !double_quote_open)
-        return ("0");
-}
-
 char *expand_env_var_1(const char *input, t_state *state)
 {
     char *env = NULL;
 
-    if (!strncmp(&input[state->i + 1], "PATH", 4))
+    if (!ft_strncmp(&input[state->i + 1], "PATH", 4))
     {
         env = getenv("PATH");
         state->i += 4;
     }
-    else if (!strncmp(&input[state->i + 1], "HOME", 4))
+    else if (!ft_strncmp(&input[state->i + 1], "HOME", 4))
     {
         env = getenv("HOME");
         state->i += 4;
     }
-    else if (!strncmp(&input[state->i + 1], "PWD", 3))
+    else if (!ft_strncmp(&input[state->i + 1], "PWD", 3))
     {
         env = getenv("PWD");
         state->i += 3;
     }
-    else if (!strncmp(&input[state->i + 1], "OLDPWD", 6))
+    else if (!ft_strncmp(&input[state->i + 1], "OLDPWD", 6))
     {
         env = getenv("OLDPWD");
         state->i += 6;
@@ -68,22 +43,22 @@ char *expand_env_var_2(const char *input, t_state *state)
 {
     char *env = NULL;
 
-    if (!strncmp(&input[state->i + 1], "SHLVL", 5))
+    if (!ft_strncmp(&input[state->i + 1], "SHLVL", 5))
     {
         env = getenv("SHLVL");
         state->i += 5;
     }
-    else if (!strncmp(&input[state->i + 1], "_", 1))
+    else if (!ft_strncmp(&input[state->i + 1], "_", 1))
     {
         env = getenv("_");
         state->i += 1;
     }
-    else if (!strncmp(&input[state->i + 1], "USER", 4))
+    else if (!ft_strncmp(&input[state->i + 1], "USER", 4))
     {
         env = getenv("USER");
         state->i += 4;
     }
-    else if (!strncmp(&input[state->i + 1], "TERM", 4))
+    else if (!ft_strncmp(&input[state->i + 1], "TERM", 4))
     {
         env = getenv("TERM");
         state->i += 4;
@@ -94,7 +69,9 @@ char *expand_env_var_2(const char *input, t_state *state)
 void process_char(const char *input, char *result, t_state *state)
 {
     char *env;
+    size_t result_size;
     
+    result_size = sizeof(result);
     env = NULL;
     if (input[state->i] == 0)
         return;
@@ -111,39 +88,46 @@ void process_char(const char *input, char *result, t_state *state)
         if (!env)
             env = expand_env_var_2(input, state);
         if (env)
-            strcat(result, env);
+            ft_strlcat(result, env, result_size);
     }
     else
-        strncat(result, &input[state->i], 1);
-
+    {
+        char temp[2] = {input[state->i], '\0'};
+        ft_strlcat(result, temp, 1);
+    }
     state->i++;
     process_char(input, result, state);
 }
 
+// int retrieve_exit_status(char *env_var, t_command *cmd, int exit_status)
+// {
+//     if (ft_strcmp(env_var, "?") == 0)
+//         return (exit_status);
+// }
 
-char    *retrieve_char_env(char *env_var)
+void    initialize_t_state(t_state *state)
 {
-    if (ft_strcmp(env_var, "PATH") == 0)
-        return (getenv("PATH"));
-    if (ft_strcmp(env_var, "HOME") == 0)
-        return (getenv("HOME"));
-    if (ft_strcmp(env_var, "PWD") == 0)
-        return (getenv("PWD"));
-    if (ft_strcmp(env_var, "OLDPWD") == 0)
-        return (getenv("OLDPWD"));
-    if (ft_strcmp(env_var, "SHLVL") == 0)
-        return (getenv("SHLVL"));
-    if (ft_strcmp(env_var, "_") == 0)
-        return (getenv("_"));
-    if (ft_strcmp(env_var, "USER") == 0)
-        return (getenv("USER"));
-    if (ft_strcmp(env_var, "TERM") == 0)
-        return (getenv("TERM"));
-
+    state->i = 0;
+    state->sq_open = 0;
+    state->dq_open = 0;
 }
 
-int retrieve_exit_status(char *env_var, t_command *cmd, int exit_status)
+void allocate_resources(char **result, t_state **state)
 {
-    if (ft_strcmp(env_var, "?") == 0)
-        return (exit_status);
+    *result = malloc(sizeof(char) * 1024);  // Allocate enough space for the result string
+    if (!(*result))
+    {
+        perror("Error allocating memory for result");
+        exit(1);
+    }
+    (*result)[0] = '\0';  // Initialize the result string to an empty string
+
+    *state = malloc(sizeof(t_state));  // Allocate memory for the state structure
+    if (!(*state))
+    {
+        perror("Error allocating memory for state");
+        free(*result);  // Free allocated memory for result if state allocation fails
+        exit(1);
+    }
+    initialize_t_state(*state);  // Initialize the state
 }

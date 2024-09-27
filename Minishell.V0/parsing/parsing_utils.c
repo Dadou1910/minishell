@@ -73,26 +73,25 @@ void    change_args_for_exec(t_command *cmd)
 {
     t_command   *head;
     char        **new_args;
-    int         args;
     int         i;
     int         j;
 
     head = cmd;
-    while(cmd)
+    while(head)
     {
         i = 0;
-        while (cmd->args[i][0] != '|' && cmd->args[i][0] != '<' && cmd->args[i][0] != '>')
+        while (head->args[i][0] != '|' && head->args[i][0] != '<' && head->args[i][0] != '>')
             i++;
         new_args = malloc(sizeof(char *) * (i + 1));
         if (!new_args)
             return (perror("Error with malloc"));
-        j = 0;
-        while (j++ < i)
-            new_args[j] = cmd->args[j];
+        j = -1;
+        while (++j < i)
+            new_args[j] = head->args[j];
         new_args[j] = NULL;
-        freetab(cmd->args);
-        cmd->args = new_args;
-        cmd = cmd->next;
+        freetab(head->args);
+        head->args = new_args;
+        head = head->next;
     }
 }
 

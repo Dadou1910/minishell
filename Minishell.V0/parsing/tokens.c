@@ -12,33 +12,33 @@
 
 #include "../includes/minishell.h"
 
-static int count_tokens(char *input)
-{
-    int count = 0;
-    int i = 0;
+// static int count_tokens(char *input)
+// {
+//     int count = 0;
+//     int i = 0;
 
-    while (input[i])
-    {
-        if (input[i] == ' ')
-        {
-            i++;
-            continue;
-        }
-        if (input[i] == '|' || input[i] == '>' || input[i] == '<')
-        {
-            count++;
-            if (input[i] == '>' && input[i + 1] == '>')
-                i++;
-            i++;
-            continue;
-        }
-        count++;
-        while (input[i] && input[i] != ' ' && input[i] != '|'
-                && input[i] != '>' && input[i] != '<')
-            i++;
-    }
-    return count;
-}
+//     while (input[i])
+//     {
+//         if (input[i] == ' ')
+//         {
+//             i++;
+//             continue;
+//         }
+//         if (input[i] == '|' || input[i] == '>' || input[i] == '<')
+//         {
+//             count++;
+//             if (input[i] == '>' && input[i + 1] == '>')
+//                 i++;
+//             i++;
+//             continue;
+//         }
+//         count++;
+//         while (input[i] && input[i] != ' ' && input[i] != '|'
+//                 && input[i] != '>' && input[i] != '<')
+//             i++;
+//     }
+//     return count;
+// }
 
 
 

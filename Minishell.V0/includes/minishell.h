@@ -49,7 +49,8 @@ int     open_fct_check(char *file, int i);
 void    free_t_command(t_command *cmd);
 void    new_t_command(t_command *cmd);
 void    add_line_to_history(const char *line);
-char    **tokenize_input(char *input);
+t_command   *tokenize_input(char *input);
+t_command   *fill_t_command(char *input);
 
 // Expand
 
