@@ -40,13 +40,13 @@ make
 ./minishell
 
 Vous pouvez ensuite taper des commandes comme :
-
+```bash
 ls -l | grep .c > list.txt
 echo "Bonjour $USER"
 cat << EOF
 hello
 EOF
-
+```
 ---
 
 ## 📁 Structure du projet
